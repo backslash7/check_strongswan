@@ -1,0 +1,4 @@
+/check_strongswan
+dist/
+*.test
+coverage.out

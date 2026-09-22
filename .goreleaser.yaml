@@ -1,0 +1,61 @@
+version: 2
+
+project_name: check_strongswan
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - freebsd
+    goarch:
+      - amd64
+      - arm64
+      - arm
+      - "386"
+    goarm:
+      - "6"
+      - "7"
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{.Version}}
+
+archives:
+  - formats: [tar.gz]
+    files:
+      - LICENSE
+      - README.md
+
+nfpms:
+  - package_name: check-strongswan
+    formats:
+      - deb
+      - rpm
+    bindir: /usr/lib/nagios/plugins
+    maintainer: Lukas Stana <2388984+backslash7@users.noreply.github.com>
+    homepage: https://github.com/backslash7/check_strongswan
+    license: MIT
+    description: |-
+      Nagios/NRPE plugin monitoring strongSwan IPsec connections via vici:
+      connection up/down, IKE/CHILD SA key lifetimes, SA counts and perfdata.
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^Merge "
+
+# `goreleaser release` publishes to GitHub and needs GITHUB_TOKEN.
+# Snapshot builds (`make release-snapshot`) work without it.
+release:
+  github:
+    owner: backslash7
+    name: check_strongswan
+  draft: false
+  prerelease: auto
